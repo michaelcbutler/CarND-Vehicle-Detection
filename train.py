@@ -9,6 +9,7 @@ from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
 from skimage.feature import hog
 from sklearn.model_selection import train_test_split
+from random import shuffle
 
 def bin_spatial(img, size=(32, 32)):
     """Compute binned color features"""
@@ -109,8 +110,12 @@ def extract_features(png_list, cspace='RGB', spatial_size=(32, 32),
 
 
 # Read in car and non-car images
-cars = glob.glob('test_images/vehicles/KITTI_extracted/*.png')
-notcars = glob.glob('test_images/non-vehicles/GTI/*.png')
+cars = glob.glob('test_images/vehicles/*/*.png')
+notcars = glob.glob('test_images/non-vehicles/*/*.png')
+
+# randomize order
+shuffle(cars)
+shuffle(notcars)
 
 # Balance cars and notcars
 sample_size = min(len(cars), len(notcars)) # balance cars vs notcars
