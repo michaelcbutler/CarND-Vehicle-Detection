@@ -23,23 +23,13 @@ def extract_features(png_list, cspace='RGB', spatial_size=(32, 32),
     features = []
     # Iterate through the list of images
     for png in png_list:
-        #file_features = []
         image = mpimg.imread(png)
         # Color conversion if cspace other than 'RGB'
         feature_image = color_convert(image, cspace)
 
         # Compute spatial features if flag is set
-        #if spatial_feat == True:
         spatial_features = bin_spatial(feature_image, size=spatial_size)
-            # Append features to list
-            #file_features.append(spatial_features)
-        # Compute histogram features if flag is set
-        #if hist_feat == True:
         hist_features = color_hist(feature_image, nbins=hist_bins)
-            # Append features to list
-            #file_features.append(hist_features)
-        # Compute HOG features if flag is set
-        #if hog_feat == True:
         if hog_channel == 'ALL':
             hog_features = []
             for channel in range(feature_image.shape[2]):
@@ -50,9 +40,7 @@ def extract_features(png_list, cspace='RGB', spatial_size=(32, 32),
             hog_features = get_hog_features(feature_image[:,:,hog_channel], orient, 
                         pix_per_cell, cell_per_block, vis=False, feature_vec=True)
         # Append features to list
-            #file_features.append(hog_features)
         file_features = np.hstack((spatial_features, hist_features, hog_features))
-        #features.append(np.concatenate(file_features))
         features.append(file_features)
     
     # Return list of feature vectors

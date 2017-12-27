@@ -1,14 +1,12 @@
-#import matplotlib.image as mpimg
-#import matplotlib.pyplot as plt
-#import numpy as np
 import pickle
 import collections
 import cv2
-#from scipy.ndimage.measurements import label
+
 from moviepy.editor import VideoFileClip
 
+from classify import *
 
-from subsample_lesson_fcns import *
+##### load pickle with classifier and training parameters
 
 dist_pickle = pickle.load( open("p5_pickle.p", "rb" ) )
 svc = dist_pickle["svc"]
@@ -26,17 +24,9 @@ print("orient = {}, pix_per_cell = {}, cells_per_block = {}, spatial_size = {}, 
     orient, pix_per_cell, cell_per_block, spatial_size, hist_bins, colorspace))
 print("hog channel = {}, image_format = {}".format(hog_channel, image_format))
 
+##### save bounding boxes for last 4 frames
+
 bbox_buffer = collections.deque(maxlen=4) 
-
-################################################################################
-
-def annotate_image(image, msg):
-    """Annotate image with message"""
-
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    cv2.putText(image, msg, (20, 50), font, 1, (0, 255, 255), 2, cv2.LINE_AA)
-
-    return image
 
 ################################################################################
 
@@ -52,11 +42,6 @@ def process_image(image):
                                      spatial_size, hist_bins, colorspace)
     
     bbox_buffer.append(bbox_list)
-
-    #bbox_image = draw_bboxes(image, bbox_list, color=(64, 0, 0))
-    #msg = "Bounding box count = {}".format(len(bbox_list))
-    #annotated_image = annotate_image(image, msg)
-
     labeled_image = heat_map(image, bbox_buffer)
 
     return labeled_image
