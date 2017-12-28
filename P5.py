@@ -50,4 +50,4 @@ def process_image(image):
 # load video, process each frame, write processed video
 input_video = VideoFileClip("project_video.mp4")#.subclip(20, 25)
 output_video = input_video.fl_image(process_image)
-output_video.write_videofile('test_output.mp4', audio=False)
+output_video.write_videofile('project_output.mp4', audio=False)
